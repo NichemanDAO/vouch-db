@@ -1,0 +1,258 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Service",
+    "version": "1.0.0",
+    "description": "API Service endpoints",
+    "contact": {
+      "email": "contact@nicheman.io",
+      "name": "NichemanDao"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "vouch",
+      "description": "Vouch DB API"
+    }
+  ],
+  "paths": {
+    "/vouch/add": {
+      "post": {
+        "tags": [
+          "vouch"
+        ],
+        "summary": "Add a vouch to the database",
+        "operationId": "vouch-add",
+        "requestBody": {
+          "description": "New vouch being saved",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "signature": {
+                    "type": "string",
+                    "default": "0x0000000000000000000000000000000000000000000000000000000000000000"
+                  },
+                  "msgData": {
+                    "type": "object",
+                    "properties": {
+                      "domain": {
+                        "type": "object",
+                        "properties": {
+                          "chainId": {
+                            "type": "number",
+                            "default": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "default": "Proof of Humanity"
+                          },
+                          "verifyingContract": {
+                            "type":"string",
+                            "default": "0x0000000000000000000000000000000000000000"
+                          }
+                        }
+                      },
+                      "message": {
+                        "type": "object",
+                        "properties": {
+                          "vouchedSubmission": {
+                            "type": "string",
+                            "default": "0x0000000000000000000000000000000000000000"
+                          },
+                          "voucherExpirationTimestamp": {
+                            "type": "number",
+                            "default": 1315536000
+                          }
+                        }
+                      },
+                      "primaryType": {
+                        "type": "string",
+                        "default": "IsHumanVoucher"
+                      },
+                      "types": {
+                        "type": "object",
+                        "properties": {
+                          "EIP712Domain": {
+                            "type":"array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "default": "name"
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "default": "string"
+                                }
+                              }
+                            }
+                          },
+                          "IsHumanVoucher": {
+                            "type":"array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "default": "name"
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "default": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Vouch saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftVouchSchema"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/vouch/search": {
+      "get": {
+        "tags": [
+          "vouch"
+        ],
+        "summary": "Search vouches by vouchee address",
+        "operationId": "vouch-search",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "submissionId",
+            "schema": {
+              "type": "string",
+              "default": "0x0000000000000000000000000000000000000000"
+            },
+            "description": "The address of the profile to search"
+          },
+          {
+            "in": "query",
+            "name": "minVouchers",
+            "schema": {
+              "type": "number",
+              "default": "1"
+            },
+            "description": "Return only users with a minimum of vouchers"
+          },
+          {
+            "in": "query",
+            "name": "voucherAddr",
+            "schema": {
+              "type": "string",
+              "default": "0x0000000000000000000000000000000000000000"
+            },
+            "description": "Return all users that someone vouched for (and which were not already processed)."
+          },
+          {
+            "in": "query",
+            "name": "includeResolved",
+            "schema": {
+              "type": "boolean",
+              "default": "false"
+            },
+            "description": "Include vouches for profiles that are resolved"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "vouches": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VouchSchema"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DraftVouchSchema": {
+        "type": "object",
+        "properties": {
+          "submissionId": {
+            "type": "string",
+            "example": "0x0000000000000000000000000000000000000000"
+          },
+          "vouchers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "0x0000000000000000000000000000000000000000"
+            }
+          },
+          "signatures": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "0x0000000000000000000000000000000000000000000000000000000000000000"
+            }
+          },
+          "expirationTimestamps": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "example": 1321351531
+            }
+          }
+        }
+      },
+      "VouchSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DraftVouchSchema"
+          }
+        ],
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "5d7224d3b40b1a1a046697dd"
+          }
+        }
+      }
+    }
+  }
+}
