@@ -1,7 +1,7 @@
 import {
   RequestHandler, Request, Response, NextFunction
 } from 'express';
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 import BadRequest from '../errors/bad-request';
 import logger from '../logger';
 

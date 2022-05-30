@@ -11,7 +11,7 @@ import app from './app';
 import garbageCollection from './cleanup';
 import SafeMongooseConnection from './lib/safe-mongoose-connection';
 import logger from './logger';
-import pohAbi from './abis/proof-of-humanity.json';
+import pohAbi from './abis/army-of-nicheman.json';
 import buildReapplyBot from './reapply-bot';
 
 const PORT = process.env.PORT || 3000;

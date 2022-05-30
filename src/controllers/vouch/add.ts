@@ -1,11 +1,11 @@
 import { RequestHandler } from 'express';
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 // eslint-disable-next-line camelcase
 import { recoverTypedSignature_v4 } from 'eth-sig-util';
 import { ethers } from 'ethers';
 import requestMiddleware from '../../middleware/request-middleware';
 import { Vouch } from '../../models';
-import pohAbi from '../../abis/proof-of-humanity.json';
+import pohAbi from '../../abis/army-of-nicheman.json';
 
 const addVouchSchema = Joi.object().keys({
   signature: Joi.string().required(),

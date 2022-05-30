@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from '@hapi/joi';
 import { recoverTypedSignature_v4 as recoverTypedSignatureV4 } from "eth-sig-util";
 import { RequestHandler } from "express";
 import requestMiddleware from "../../middleware/request-middleware";

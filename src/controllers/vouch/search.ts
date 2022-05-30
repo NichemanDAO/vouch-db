@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 import { RequestHandler } from 'express';
 import requestMiddleware from '../../middleware/request-middleware';
 import { Vouch } from '../../models';
